@@ -23,7 +23,7 @@ variable "PYTHON_VERSION" {
 }
 
 group "default" {
-  targets = ["postgres", "spilo"]
+  targets = ["postgres"]
 }
 
 target "shared" {
