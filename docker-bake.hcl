@@ -84,14 +84,13 @@ target "spilo" {
 
   tags = [
     "${SPILO_REPO}:latest",
-    "${SPILO_REPO}:${SPILO_VERSION}-latest"
   ]
 }
 
 target "spilo_base" {
   inherits = ["shared"]
 
-  context = "https://github.com/Alfred-hq/spilo:postgres-appliance"
+  context = "https://github.com/Alfred-hq/spilo/tree/production/postgres-appliance"
 
   args = {
     TIMESCALEDB = ""
@@ -244,17 +243,5 @@ target "ivm" {
 
   args = {
     PGSQL_IVM_TAG = "v1.5.1"
-  }
-}
-
-target "ivm_15" {
-  inherits = ["ivm"]
-
-  contexts = {
-    postgres_base = "docker-image://postgres:15-bookworm"
-  }
-
-  args = {
-    POSTGRES_BASE_VERSION = 15
   }
 }
