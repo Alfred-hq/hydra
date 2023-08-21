@@ -69,12 +69,12 @@ target "spilo" {
 
   contexts = {
     spilo_base = "target:spilo_base"
-    columnar_15 = "target:columnar_15"
-    http_15 = "target:http_15"
-    mysql_15 = "target:mysql_15"
-    multicorn_15 = "target:multicorn_15"
-    s3_15 = "target:s3_spilo_15"
-    ivm_15 = "target:ivm_15"
+    columnar_15 = "target:columnar_${POSTGRES_BASE_VERSION}"
+    http_15 = "target:http_${POSTGRES_BASE_VERSION}"
+    mysql_15 = "target:mysql_${POSTGRES_BASE_VERSION}"
+    multicorn_15 = "target:multicorn_${POSTGRES_BASE_VERSION}"
+    s3_15 = "target:s3_${POSTGRES_BASE_VERSION}"
+    ivm_15 = "target:ivm_${POSTGRES_BASE_VERSION}"
   }
 
   args = {
