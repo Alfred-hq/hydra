@@ -11,9 +11,10 @@ jobs:
     name: Push Spilo
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      packages: 'write'
+      contents: read
       id-token: write
+      # Allows pushing to the GitHub Container Registry
+      packages: write
 
     steps:
     - name: Checkout
@@ -22,9 +23,6 @@ jobs:
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
 
     - name: Set up Depot
       uses: depot/setup-action@v1
@@ -40,3 +38,4 @@ jobs:
       with:
         project: nkjck4c1mb
         push: true
+        load: true
