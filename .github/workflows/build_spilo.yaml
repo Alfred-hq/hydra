@@ -34,12 +34,5 @@ jobs:
 
     - name: Build and push postgres
       uses: docker/bake-action@v3
-      targets: postgres
-      with:
-        push: true
-
-    - name: Build and push Spilo
-      uses: docker/bake-action@v3
-      targets: spilo
       with:
         push: true
