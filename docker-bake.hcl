@@ -68,7 +68,7 @@ target "spilo" {
   dockerfile = "Dockerfile.spilo"
 
   contexts = {
-    spilo_base = "docker-image://alfredcapital/splio:013baf818474aeeadc9c1464b290c0dae695629d"
+    spilo_base = "https://github.com/Alfred-hq/spilo.git#production:postgres-appliance"
     columnar_15 = "target:columnar_${POSTGRES_BASE_VERSION}"
     http_15 = "target:http_${POSTGRES_BASE_VERSION}"
     mysql_15 = "target:mysql_${POSTGRES_BASE_VERSION}"
