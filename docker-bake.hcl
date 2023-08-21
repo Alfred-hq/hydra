@@ -3,7 +3,7 @@ variable "POSTGRES_REPO" {
 }
 
 variable "SPILO_REPO" {
-  default = "alfredcapital/splio"
+  default = "alfredcapital/hydra"
 }
 
 variable "SPILO_VERSION" {
@@ -23,13 +23,13 @@ variable "PYTHON_VERSION" {
 }
 
 group "default" {
-  targets = ["postgres", "spilo"]
+  targets = ["spilo"]
 }
 
 target "shared" {
   platforms = [
     "linux/amd64",
-    # "linux/arm64"
+    "linux/arm64"
   ]
 
   args = {
