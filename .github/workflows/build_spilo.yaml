@@ -1,25 +1,10 @@
 name: Build Spilo
 
 on:
-  workflow_call:
-    inputs:
-      production:
-        required: true
-        type: boolean
-        default: false
-      spilo_repo:
-        required: true
-        type: string
-  workflow_dispatch:
-    inputs:
-      production:
-        required: true
-        type: boolean
-        default: false
-      spilo_repo:
-        required: true
-        type: string
-        default: alfredcapital/splio
+  push:
+    branches:    
+      - production
+      - development
 
 jobs:
   push_spilo:

@@ -16,8 +16,8 @@ on:
       - .github/workflows/ci.yaml
 
 env:
-  POSTGRES_REPO: ghcr.io/hydradatabase/hydra
-  SPILO_REPO: 011789831835.dkr.ecr.us-east-1.amazonaws.com/spilo
+  POSTGRES_REPO: alfredcapital/hydra
+  SPILO_REPO: alfredcapital/splio
   TEST_ARTIFACT_DIR: /tmp/test_artifacts
 
 jobs:
