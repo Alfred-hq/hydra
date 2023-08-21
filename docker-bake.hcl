@@ -90,12 +90,10 @@ target "spilo" {
 target "spilo_base" {
   inherits = ["shared"]
 
-  context = "https://github.com/Alfred-hq/spilo.git#${SPILO_VERSION}:postgres-appliance"
-
-  args = {
-    TIMESCALEDB = ""
-    PGVERSION = "${SPILO_POSTGRES_VERSION}"
+  contexts = {
+    spilo_base = "docker-image://docker.io/alfredcapital/splio:013baf818474aeeadc9c1464b290c0dae695629d"
   }
+
 }
 
 target "http" {
