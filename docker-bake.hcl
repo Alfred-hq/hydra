@@ -91,7 +91,7 @@ target "spilo_base" {
   inherits = ["shared"]
 
   contexts = {
-    spilo_base = "docker-image://docker.io/alfredcapital/splio:013baf818474aeeadc9c1464b290c0dae695629d"
+    spilo_base = "https://github.com/Alfred-hq/spilo.git#production:postgres-appliance"
   }
 
 }
