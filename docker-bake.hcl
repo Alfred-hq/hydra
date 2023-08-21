@@ -47,6 +47,7 @@ target "postgres" {
     http = "target:http_${POSTGRES_BASE_VERSION}"
     mysql = "target:mysql_${POSTGRES_BASE_VERSION}"
     multicorn = "target:multicorn_${POSTGRES_BASE_VERSION}"
+    s3 = "target:s3_${POSTGRES_BASE_VERSION}"
     ivm = "target:ivm_${POSTGRES_BASE_VERSION}"
   }
 
@@ -72,6 +73,7 @@ target "spilo" {
     http_15 = "target:http_15"
     mysql_15 = "target:mysql_15"
     multicorn_15 = "target:multicorn_15"
+    s3_15 = "target:s3_spilo_15"
     ivm_15 = "target:ivm_15"
   }
 
