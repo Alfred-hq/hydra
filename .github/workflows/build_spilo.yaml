@@ -34,6 +34,5 @@ jobs:
 
     - name: Build and push postgres
       uses: docker/bake-action@v3
-      set:
       with:
         push: true
