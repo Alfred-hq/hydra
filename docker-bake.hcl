@@ -7,7 +7,7 @@ variable "SPILO_REPO" {
 }
 
 variable "SPILO_VERSION" {
-  default = "2.1-p9"
+  default = "production"
 }
 
 variable "POSTGRES_BASE_VERSION" {
@@ -23,7 +23,7 @@ variable "PYTHON_VERSION" {
 }
 
 group "default" {
-  targets = ["postgres"]
+  targets = ["postgres", "spilo"]
 }
 
 target "shared" {
@@ -90,7 +90,7 @@ target "spilo" {
 target "spilo_base" {
   inherits = ["shared"]
 
-  context = "https://github.com/Alfred-hq/spilo/tree/production/postgres-appliance"
+  context = "https://github.com/Alfred-hq/spilo.git#${SPILO_VERSION}:postgres-appliance"
 
   args = {
     TIMESCALEDB = ""
