@@ -38,4 +38,3 @@ jobs:
       with:
         project: nkjck4c1mb
         push: true
-        load: true
