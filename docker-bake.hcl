@@ -11,15 +11,11 @@ variable "SPILO_VERSION" {
 }
 
 variable "POSTGRES_BASE_VERSION" {
-  default = "14"
+  default = "15"
 }
 
 variable "SPILO_POSTGRES_VERSION" {
-  default = "14"
-}
-
-variable "SPILO_POSTGRES_OLD_VERSIONS" {
-  default = "13"
+  default = "15"
 }
 
 variable "PYTHON_VERSION" {
@@ -100,7 +96,6 @@ target "spilo_base" {
   args = {
     TIMESCALEDB = ""
     PGVERSION = "${SPILO_POSTGRES_VERSION}"
-    PGOLDVERSIONS = "${SPILO_POSTGRES_OLD_VERSIONS}"
   }
 }
 
