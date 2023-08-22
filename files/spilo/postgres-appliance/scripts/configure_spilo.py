@@ -40,7 +40,7 @@ WALG_SSH_NAMES = ['WALG_SSH_PREFIX', 'SSH_PRIVATE_KEY_PATH', 'SSH_USERNAME', 'SS
 
 def parse_args():
     sections = ['all', 'patroni', 'pgqd', 'certificate', 'wal-e', 'crontab',
-                'pam-oauth2', 'pgbouncer', 'bootstrap', 'standby-cluster', 'log']
+                'pam-oauth2', 'pgbouncer', 'bootstrap', 'standby-cluster', 'log', 'pgbackrest']
     argp = argparse.ArgumentParser(description='Configures Spilo',
                                    epilog="Choose from the following sections:\n\t{}".format('\n\t'.join(sections)),
                                    formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -288,6 +288,7 @@ postgresql:
   data_dir: {{PGDATA}}
   parameters:
     archive_command: {{{postgresql.parameters.archive_command}}}
+    shared_buffers: {{postgresql.parameters.shared_buffers}}
     logging_collector: 'on'
     log_destination: csvlog
     log_directory: ../pg_log
@@ -582,6 +583,7 @@ def get_placeholders(provider):
 
     placeholders.setdefault('LOG_SHIP_SCHEDULE', '1 0 * * *')
     placeholders.setdefault('LOG_S3_BUCKET', '')
+    placeholders.setdefault('LOG_S3_ENDPOINT', '')
     placeholders.setdefault('LOG_TMPDIR', os.path.abspath(os.path.join(placeholders['PGROOT'], '../tmp')))
     placeholders.setdefault('LOG_BUCKET_SCOPE_SUFFIX', '')
 
@@ -667,6 +669,9 @@ def get_placeholders(provider):
         os_memory_mb = sys.maxsize
     os_memory_mb = min(os_memory_mb, os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES') / 1048576)
 
+    # Depending on environment we take 1/4 or 1/5 of the memory, expressed in full MB's
+    sb_ratio = 5 if USE_KUBERNETES else 4
+    placeholders['postgresql']['parameters']['shared_buffers'] = '{}MB'.format(int(os_memory_mb/sb_ratio))
     # # 1 connection per 30 MB, at least 100, at most 1000
     placeholders['postgresql']['parameters']['max_connections'] = min(max(100, int(os_memory_mb/30)), 1000)
 
@@ -749,7 +754,8 @@ def write_log_environment(placeholders):
     aws_region = log_env.get('AWS_REGION')
     if not aws_region:
         aws_region = placeholders['instance_data']['zone'][:-1]
-    log_env['LOG_AWS_HOST'] = 's3.{}.amazonaws.com'.format(aws_region)
+
+    log_env['LOG_AWS_REGION'] = aws_region
 
     log_s3_key = 'spilo/{LOG_BUCKET_SCOPE_PREFIX}{SCOPE}{LOG_BUCKET_SCOPE_SUFFIX}/log/'.format(**log_env)
     log_s3_key += placeholders['instance_data']['id']
@@ -762,7 +768,7 @@ def write_log_environment(placeholders):
     if not os.path.exists(log_env['LOG_ENV_DIR']):
         os.makedirs(log_env['LOG_ENV_DIR'])
 
-    for var in ('LOG_TMPDIR', 'LOG_AWS_HOST', 'LOG_S3_KEY', 'LOG_S3_BUCKET', 'PGLOG'):
+    for var in ('LOG_TMPDIR', 'LOG_AWS_REGION', 'LOG_S3_ENDPOINT', 'LOG_S3_KEY', 'LOG_S3_BUCKET', 'PGLOG'):
         write_file(log_env[var], os.path.join(log_env['LOG_ENV_DIR'], var), True)
 
 
@@ -995,7 +1001,7 @@ def write_crontab(placeholders, overwrite):
         lines += [('{LOG_SHIP_SCHEDULE} nice -n 5 envdir "{LOG_ENV_DIR}"' +
                    ' /scripts/upload_pg_log_to_s3.py').format(**placeholders)]
 
-    lines += yaml.load(placeholders['CRONTAB'])
+    lines += yaml.safe_load(placeholders['CRONTAB'])
 
     if len(lines) > 1 or root_lines:
         setup_runit_cron(placeholders)
@@ -1051,10 +1057,11 @@ def main():
     placeholders = get_placeholders(provider)
     logging.info('Looks like you are running %s', provider)
 
-    config = yaml.load(pystache_render(TEMPLATE, placeholders))
+    config = yaml.safe_load(pystache_render(TEMPLATE, placeholders))
     config.update(get_dcs_config(config, placeholders))
 
-    user_config = yaml.load(os.environ.get('SPILO_CONFIGURATION', os.environ.get('PATRONI_CONFIGURATION', ''))) or {}
+    user_config = yaml.safe_load(os.environ.get('SPILO_CONFIGURATION',
+                                                os.environ.get('PATRONI_CONFIGURATION', ''))) or {}
     if not isinstance(user_config, dict):
         config_var_name = 'SPILO_CONFIGURATION' if 'SPILO_CONFIGURATION' in os.environ else 'PATRONI_CONFIGURATION'
         raise ValueError('{0} should contain a dict, yet it is a {1}'.format(config_var_name, type(user_config)))
@@ -1110,6 +1117,8 @@ def main():
                 adjust_owner(pg_socket_dir)
         elif section == 'pgqd':
             link_runit_service(placeholders, 'pgqd')
+        elif section == 'pgbackrest':
+            link_runit_service(placeholders, 'pgbackrest')
         elif section == 'log':
             if bool(placeholders.get('LOG_S3_BUCKET')):
                 write_log_environment(placeholders)
