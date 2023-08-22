@@ -190,13 +190,15 @@ while IFS= read -r db_name; do
 CREATE EXTENSION IF NOT EXISTS pg_stat_kcache SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS set_user SCHEMA public;
 ALTER EXTENSION set_user UPDATE;
-UPDATE pg_catalog.pg_extension SET extname = 'columnar' WHERE extname = 'citus_columnar';
-UPDATE pg_catalog.pg_proc SET probin = '\$libdir/columnar' WHERE probin = '\$libdir/citus_columnar';
-CREATE EXTENSION IF NOT EXISTS columnar;
-ALTER EXTENSION columnar UPDATE;
-ALTER DATABASE ${db_name} SET default_table_access_method = 'columnar';
 GRANT EXECUTE ON FUNCTION public.set_user(text) TO admin;
 GRANT EXECUTE ON FUNCTION public.pg_stat_statements_reset($RESET_ARGS) TO admin;"
+    if [ "$DEFAULT_TABLE_ACCESS_METHOD" = "columnar" ]; then
+        echo "UPDATE pg_catalog.pg_extension SET extname = 'columnar' WHERE extname = 'citus_columnar';"
+        echo "UPDATE pg_catalog.pg_proc SET probin = '\$libdir/columnar' WHERE probin = '\$libdir/citus_columnar';"
+        echo "CREATE EXTENSION IF NOT EXISTS columnar;"
+        echo "ALTER EXTENSION columnar UPDATE;"
+        echo "ALTER DATABASE ${db_name} SET default_table_access_method = 'columnar';"
+    fi
     if [ "$PGVER" -lt 10 ]; then
         echo "GRANT EXECUTE ON FUNCTION pg_catalog.pg_switch_xlog() TO admin;"
     else
