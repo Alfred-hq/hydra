@@ -7,7 +7,7 @@ variable "SPILO_REPO" {
 }
 
 variable "SPILO_VERSION" {
-  default = "production"
+  default = "v1"
 }
 
 variable "POSTGRES_BASE_VERSION" {
@@ -84,6 +84,7 @@ target "spilo" {
 
   tags = [
     "${SPILO_REPO}:latest",
+    "${SPILO_REPO}:${SPILO_VERSION}",
   ]
 }
 
