@@ -74,7 +74,15 @@ if "max_wal_size" in patroni_config["postgresql"]["parameters"]:
 if "shared_preload_libraries" in patroni_config["postgresql"]["parameters"]:
     recommended_settings.pop("shared_preload_libraries", "")
 
-patroni_config["postgresql"]["parameters"].update(recommended_settings)
+sanitized_configurations = {}
+
+for key, value in recommended_settings.items():
+    if isinstance(value, str):
+        sanitized_configurations[key] = value.replace("'", "")
+    else:
+        sanitized_configurations[key] = value
+
+patroni_config["postgresql"]["parameters"].update(sanitized_configurations)
 
 # Print the formatted YAML output
 print("Structured YAML representation of recommended settings:")

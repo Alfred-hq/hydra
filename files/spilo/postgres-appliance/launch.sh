@@ -1,5 +1,7 @@
 #!/bin/sh
 
+python3 /scripts/patroni_pg_tune.py
+
 if [ -f /a.tar.xz ]; then
     echo "decompressing spilo image..."
     if tar xpJf /a.tar.xz -C / > /dev/null 2>&1; then
@@ -43,16 +45,12 @@ chmod -R go-w "$PGROOT"
 chmod 01777 "$RW_DIR/tmp"
 chmod 0700 "$PGDATA"
 
-python3 /scripts/patroni_pg_tune.py
-
-echo  "SPILO_CONFIGURATION not set, will get the configs from spilo.yaml"
-SPILO_CONFIGURATION=$(cat /home/postgres/spilo.yaml)
+python3 /scripts/configure_spilo.py all
 
 if [ -n "$PG_TIMESCALE_AUTO_TUNE" ]; then
-    SPILO_CONFIGURATION=$(cat /home/postgres/spilo_tuned.yaml)
+    python3 /scripts/patroni_pg_tune.py
 fi
 
-python3 /scripts/configure_spilo.py all
 
 /scripts/patroni_wait.sh -t 3600 -r health -- patronictl edit-config --apply postgres.yml --force -q &
 /scripts/patroni_wait.sh -t 3600 -r health -- patronictl edit-config --replace postgres.yml --force -q &
