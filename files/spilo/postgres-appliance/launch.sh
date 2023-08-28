@@ -45,8 +45,8 @@ chmod 0700 "$PGDATA"
 
 python3 /scripts/patroni_pg_tune.py
 
-echo  "SPILO_CONFIGURATION not set, will get the configs from /local/spilo.yaml"
-export SPILO_CONFIGURATION=$(cat /local/spilo.yaml)
+echo  "SPILO_CONFIGURATION not set, will get the configs from spilo.yaml"
+export SPILO_CONFIGURATION=$(cat spilo.yaml)
 
 if [ -n "$PG_TIMESCALE_AUTO_TUNE" ]; then
     export SPILO_CONFIGURATION=$(cat spilo_tuned.yaml)
