@@ -38,38 +38,38 @@ with open('spilo.yaml', 'r') as yaml_file:
     patroni_config = yaml.safe_load(yaml_file)
 
 
-if "shared_buffers" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("shared_buffers", "")
+# if "shared_buffers" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("shared_buffers", "")
 
-if "effective_cache_size" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("effective_cache_size", "")
+# if "effective_cache_size" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("effective_cache_size", "")
 
-if "maintenance_work_mem" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("maintenance_work_mem", "")
+# if "maintenance_work_mem" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("maintenance_work_mem", "")
 
-if "checkpoint_completion_target" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("checkpoint_completion_target", "")
+# if "checkpoint_completion_target" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("checkpoint_completion_target", "")
 
-if "wal_buffers" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("wal_buffers", "")
+# if "wal_buffers" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("wal_buffers", "")
 
-if "default_statistics_target" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("default_statistics_target", "")
+# if "default_statistics_target" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("default_statistics_target", "")
 
-if "random_page_cost" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("random_page_cost", "")
+# if "random_page_cost" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("random_page_cost", "")
 
-if "effective_io_concurrency" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("effective_io_concurrency", "")
+# if "effective_io_concurrency" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("effective_io_concurrency", "")
 
-if "work_mem" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("work_mem", "")
+# if "work_mem" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("work_mem", "")
 
-if "min_wal_size" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("min_wal_size", "")
+# if "min_wal_size" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("min_wal_size", "")
 
-if "max_wal_size" in patroni_config["postgresql"]["parameters"]:
-    recommended_settings.pop("max_wal_size", "")
+# if "max_wal_size" in patroni_config["postgresql"]["parameters"]:
+#     recommended_settings.pop("max_wal_size", "")
 
 if "shared_preload_libraries" in patroni_config["postgresql"]["parameters"]:
     recommended_settings.pop("shared_preload_libraries", "")
