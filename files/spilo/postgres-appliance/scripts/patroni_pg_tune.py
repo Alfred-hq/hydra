@@ -84,6 +84,7 @@ for key, value in recommended_settings.items():
 
 patroni_config["postgresql"]["parameters"].update(sanitized_configurations)
 
+patroni_config["bootstrap"]["dcs"]["parameters"].update(sanitized_configurations)
 # Print the formatted YAML output
 print("Structured YAML representation of recommended settings:")
 print(patroni_config)
