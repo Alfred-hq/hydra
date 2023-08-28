@@ -47,6 +47,7 @@ python3 /scripts/patroni_pg_tune.py
 
 python3 /scripts/configure_spilo.py all
 
+timescaledb-tune --yes --dry-run
 
 /scripts/patroni_wait.sh -t 3600 -r health -- patronictl edit-config --apply postgres.yml --force -q &
 /scripts/patroni_wait.sh -t 3600 -r health -- patronictl edit-config --replace postgres.yml --force -q &
