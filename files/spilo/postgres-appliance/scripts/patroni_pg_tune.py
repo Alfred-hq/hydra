@@ -34,7 +34,7 @@ recommended_settings.pop("log_connections", "")
 recommended_settings.pop("log_disconnections", "")
 
 
-with open('postgres.yml', 'r') as yaml_file:
+with open('spilo.yaml', 'r') as yaml_file:
     patroni_config = yaml.safe_load(yaml_file)
 
 
@@ -80,5 +80,5 @@ patroni_config["postgresql"]["parameters"].update(recommended_settings)
 print("Structured YAML representation of recommended settings:")
 print(patroni_config)
 
-with open('postgres.yml', 'w') as yaml_file:
+with open('spilo_tuned.yaml', 'w') as yaml_file:
     yaml.dump(patroni_config, yaml_file, default_flow_style=False)
