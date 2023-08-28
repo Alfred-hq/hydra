@@ -1,7 +1,5 @@
 #!/bin/sh
 
-python3 /scripts/patroni_pg_tune.py
-
 if [ -f /a.tar.xz ]; then
     echo "decompressing spilo image..."
     if tar xpJf /a.tar.xz -C / > /dev/null 2>&1; then
