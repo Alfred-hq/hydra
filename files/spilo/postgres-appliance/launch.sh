@@ -43,11 +43,11 @@ chmod -R go-w "$PGROOT"
 chmod 01777 "$RW_DIR/tmp"
 chmod 0700 "$PGDATA"
 
-python3 /scripts/configure_spilo.py all
-
 if [ -n "$PG_TIMESCALE_AUTO_TUNE" ]; then
     python3 /scripts/patroni_pg_tune.py
 fi
+
+python3 /scripts/configure_spilo.py all
 
 
 /scripts/patroni_wait.sh -t 3600 -r health -- patronictl edit-config --apply postgres.yml --force -q &
