@@ -48,12 +48,11 @@ python3 /scripts/patroni_pg_tune.py
 echo  "SPILO_CONFIGURATION not set, will get the configs from /local/spilo.yaml"
 export SPILO_CONFIGURATION=$(cat /local/spilo.yaml)
 
-python3 /scripts/configure_spilo.py all
-
 if [ -n "$PG_TIMESCALE_AUTO_TUNE" ]; then
     export SPILO_CONFIGURATION=$(cat spilo_tuned.yaml)
 fi
 
+python3 /scripts/configure_spilo.py all
 
 /scripts/patroni_wait.sh -t 3600 -r health -- patronictl edit-config --apply postgres.yml --force -q &
 /scripts/patroni_wait.sh -t 3600 -r health -- patronictl edit-config --replace postgres.yml --force -q &
