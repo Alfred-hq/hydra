@@ -43,9 +43,7 @@ chmod -R go-w "$PGROOT"
 chmod 01777 "$RW_DIR/tmp"
 chmod 0700 "$PGDATA"
 
-if [ -n "$PG_TIMESCALE_AUTO_TUNE" ]; then
-    python3 /scripts/patroni_pg_tune.py
-fi
+python3 /scripts/patroni_pg_tune.py
 
 python3 /scripts/configure_spilo.py all
 

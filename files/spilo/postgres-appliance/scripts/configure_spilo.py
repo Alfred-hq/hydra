@@ -1060,11 +1060,14 @@ def main():
     config = yaml.safe_load(pystache_render(TEMPLATE, placeholders))
     config.update(get_dcs_config(config, placeholders))
 
-    user_config = yaml.safe_load(os.environ.get('SPILO_CONFIGURATION',
-                                                os.environ.get('PATRONI_CONFIGURATION', ''))) or {}
-    if not isinstance(user_config, dict):
-        config_var_name = 'SPILO_CONFIGURATION' if 'SPILO_CONFIGURATION' in os.environ else 'PATRONI_CONFIGURATION'
-        raise ValueError('{0} should contain a dict, yet it is a {1}'.format(config_var_name, type(user_config)))
+    # user_config = yaml.safe_load(os.environ.get('SPILO_CONFIGURATION',
+    #                                             os.environ.get('PATRONI_CONFIGURATION', ''))) or {}
+    # if not isinstance(user_config, dict):
+    #     config_var_name = 'SPILO_CONFIGURATION' if 'SPILO_CONFIGURATION' in os.environ else 'PATRONI_CONFIGURATION'
+    #     raise ValueError('{0} should contain a dict, yet it is a {1}'.format(config_var_name, type(user_config)))
+
+    with open(os.environ.get('SPILO_CONFIGURATION_FILE', 'spilo.yaml'), 'r') as yaml_file:
+        user_config = yaml.safe_load(yaml_file)
 
     user_config_copy = deepcopy(user_config)
     config = deep_update(user_config_copy, config)
