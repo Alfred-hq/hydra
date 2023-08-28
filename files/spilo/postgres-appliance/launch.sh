@@ -43,10 +43,8 @@ chmod -R go-w "$PGROOT"
 chmod 01777 "$RW_DIR/tmp"
 chmod 0700 "$PGDATA"
 
-if [ -z "$SPILO_CONFIGURATION" ]; then
-    echo  "SPILO_CONFIGURATION not set, will get the configs from /local/spilo.yaml"
-    export SPILO_CONFIGURATION=$(cat /local/spilo.yaml)
-fi
+echo  "SPILO_CONFIGURATION not set, will get the configs from /local/spilo.yaml"
+export SPILO_CONFIGURATION=$(cat /local/spilo.yaml)
 
 python3 /scripts/configure_spilo.py all
 
