@@ -7,7 +7,7 @@ variable "SPILO_REPO" {
 }
 
 variable "SPILO_VERSION" {
-  default = "v7"
+  default = "v8"
 }
 
 variable "POSTGRES_BASE_VERSION" {
