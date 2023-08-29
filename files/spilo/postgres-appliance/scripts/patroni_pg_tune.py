@@ -80,9 +80,9 @@ print(recommended_settings)
 
 patroni_config_copy = patroni_config.copy()
 
-patroni_config_copy["postgresql"]["parameters"].update(sanitized_configurations)
+patroni_config_copy["postgresql"]["parameters"].update(recommended_settings)
 
-patroni_config_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(sanitized_configurations)
+patroni_config_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(recommended_settings)
 # Print the formatted YAML output
 print("Structured YAML representation of recommended settings:")
 print(patroni_config_copy)
