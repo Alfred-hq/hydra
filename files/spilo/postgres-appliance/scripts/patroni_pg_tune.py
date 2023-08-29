@@ -48,9 +48,21 @@ recommended_settings.pop("log_disconnections", "")
 tuned_file_exist = os.path.isfile('pgdata/pgroot/spilo_tuned.yaml')
 
 if tuned_file_exist:
+    with open('spilo.yaml', 'r') as yaml_file_source:
+        fresh_config = yaml.safe_load(yaml_file_source)
+
     print("Existing tuned file exist taking it as source")
     with open('pgdata/pgroot/spilo_tuned.yaml', 'r') as yaml_file_source:
-        patroni_config = yaml.safe_load(yaml_file_source)
+        patroni_config_tuned = yaml.safe_load(yaml_file_source)
+
+        patroni_config_tuned_copy = patroni_config_tuned.copy()
+
+        patroni_config_tuned_copy["postgresql"]["parameters"].update(fresh_config["postgresql"]["parameters"])
+
+        patroni_config_tuned_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(fresh_config["bootstrap"]["dcs"]["postgresql"]["parameters"])
+
+        patroni_config = patroni_config_tuned_copy.copy()
+
 else:
     print("Existing tuned file does not exist")
     with open('spilo.yaml', 'r') as yaml_file_source:
