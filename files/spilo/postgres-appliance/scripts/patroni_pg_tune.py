@@ -45,7 +45,7 @@ recommended_settings.pop("wal_compression", "")
 recommended_settings.pop("log_connections", "")
 recommended_settings.pop("log_disconnections", "")
 
-tuned_file_exist = os.path.isfile('spilo_tuned.yaml')
+tuned_file_exist = os.path.isfile('pgdata/pgroot/spilo_tuned.yaml')
 
 if tuned_file_exist:
     print("Existing tuned file exist taking it as source")
@@ -107,5 +107,5 @@ patroni_config_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(recom
 print("Structured YAML representation of recommended settings:")
 print(patroni_config_copy)
 
-with open('spilo_tuned.yaml', 'w') as yaml_file_tune:
+with open('pgdata/pgroot/spilo_tuned.yaml', 'w') as yaml_file_tune:
     yaml.dump(patroni_config_copy, yaml_file_tune, default_flow_style=False)
