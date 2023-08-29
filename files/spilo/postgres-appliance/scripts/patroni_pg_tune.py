@@ -1,5 +1,6 @@
 import subprocess
 import yaml
+import os
 
 # Run timescaledb-tune command and capture the output
 command = "timescaledb-tune --yes --dry-run"
@@ -44,8 +45,16 @@ recommended_settings.pop("wal_compression", "")
 recommended_settings.pop("log_connections", "")
 recommended_settings.pop("log_disconnections", "")
 
-with open('spilo.yaml', 'r') as yaml_file_source:
-    patroni_config = yaml.safe_load(yaml_file_source)
+tuned_file_exist = os.path.isfile('spilo_tuned.yaml')
+
+if tuned_file_exist:
+    print("Existing tuned file exist taking it as source")
+    with open('spilo_tuned.yaml', 'r') as yaml_file_source:
+        patroni_config = yaml.safe_load(yaml_file_source)
+else:
+    print("Existing tuned file does not exist")
+    with open('spilo.yaml', 'r') as yaml_file_source:
+        patroni_config = yaml.safe_load(yaml_file_source)
 
 # if "shared_buffers" in patroni_config["postgresql"]["parameters"]:
 #     recommended_settings.pop("shared_buffers", "")
