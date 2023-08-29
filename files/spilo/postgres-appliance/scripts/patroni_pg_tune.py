@@ -33,6 +33,8 @@ recommended_settings.pop("wal_compression", "")
 recommended_settings.pop("log_connections", "")
 recommended_settings.pop("log_disconnections", "")
 
+with open('spilo.yaml', 'r') as yaml_file_source:
+    patroni_config = yaml.safe_load(yaml_file_source)
 
 # if "shared_buffers" in patroni_config["postgresql"]["parameters"]:
 #     recommended_settings.pop("shared_buffers", "")
@@ -74,9 +76,6 @@ if "shared_preload_libraries" in patroni_config["postgresql"]["parameters"]:
 print("Output of timescaledb-tune recommended_settings:")
 print(recommended_settings)
 
-
-with open('spilo.yaml', 'r') as yaml_file_source:
-    patroni_config = yaml.safe_load(yaml_file_source)
 
 
 patroni_config_copy = patroni_config.copy()
