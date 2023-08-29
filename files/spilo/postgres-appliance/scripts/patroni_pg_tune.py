@@ -22,7 +22,7 @@ recommended_settings = {}
 
 for config in sanitized_configurations:
     key, value = config.split('=')
-    recommended_settings[key.strip()] = value.strip()
+    recommended_settings[key.strip()] = value.strip().replace("'", "")
 
 recommended_settings.pop("max_connections", "")
 recommended_settings.pop("max_replication_slots", "")
@@ -32,10 +32,6 @@ recommended_settings.pop("max_wal_senders", "")
 recommended_settings.pop("wal_compression", "")
 recommended_settings.pop("log_connections", "")
 recommended_settings.pop("log_disconnections", "")
-
-
-with open('spilo.yaml', 'r') as yaml_file:
-    patroni_config = yaml.safe_load(yaml_file)
 
 
 # if "shared_buffers" in patroni_config["postgresql"]["parameters"]:
@@ -74,22 +70,23 @@ with open('spilo.yaml', 'r') as yaml_file:
 if "shared_preload_libraries" in patroni_config["postgresql"]["parameters"]:
     recommended_settings.pop("shared_preload_libraries", "")
 
-sanitized_configurations = {}
 
-for key, value in recommended_settings.items():
-    if isinstance(value, str):
-        sanitized_configurations[key] = value.replace("'", "")
-    else:
-        sanitized_configurations[key] = value
+print("Output of timescaledb-tune recommended_settings:")
+print(recommended_settings)
+
+
+with open('spilo.yaml', 'r') as yaml_file_source:
+    patroni_config = yaml.safe_load(yaml_file_source)
+
 
 patroni_config_copy = patroni_config.copy()
 
-patroni_config_copy["postgresql"]["parameters"].update(sanitized_configurations)
+patroni_config_copy["postgresql"]["parameters"] = patroni_config_copy["postgresql"]["parameters"].update(sanitized_configurations)
 
-patroni_config_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(sanitized_configurations)
+patroni_config_copy["bootstrap"]["dcs"]["postgresql"]["parameters"] = patroni_config_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(sanitized_configurations)
 # Print the formatted YAML output
 print("Structured YAML representation of recommended settings:")
 print(patroni_config_copy)
 
-with open('spilo_tuned.yaml', 'w') as yaml_file:
-    yaml.dump(patroni_config_copy, yaml_file, default_flow_style=False)
+with open('spilo_tuned.yaml', 'w') as yaml_file_tune:
+    yaml.dump(patroni_config_copy, yaml_file_tune, default_flow_style=False)
