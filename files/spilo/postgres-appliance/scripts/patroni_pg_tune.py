@@ -1,9 +1,8 @@
 import subprocess
 import yaml
-import os
 
 # Run timescaledb-tune command and capture the output
-command = "timescaledb-tune --yes --dry-run"
+command = "timescaledb-tune --yes --dry-run -conf-path=pgdata/pgroot/data/postgresql.base.conf"
 output = subprocess.check_output(command, shell=True, text=True)
 
 def is_a_postgres_configuration(line: any):
@@ -45,28 +44,9 @@ recommended_settings.pop("wal_compression", "")
 recommended_settings.pop("log_connections", "")
 recommended_settings.pop("log_disconnections", "")
 
-tuned_file_exist = os.path.isfile('pgdata/pgroot/spilo_tuned.yaml')
-
-if tuned_file_exist:
-    with open('spilo.yaml', 'r') as yaml_file_source:
-        fresh_config = yaml.safe_load(yaml_file_source)
-
-    print("Existing tuned file exist taking it as source")
-    with open('pgdata/pgroot/spilo_tuned.yaml', 'r') as yaml_file_source:
-        patroni_config_tuned = yaml.safe_load(yaml_file_source)
-
-    patroni_config_tuned_copy = patroni_config_tuned.copy()
-
-    patroni_config_tuned_copy["postgresql"]["parameters"].update(fresh_config["postgresql"]["parameters"])
-
-    patroni_config_tuned_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(fresh_config["bootstrap"]["dcs"]["postgresql"]["parameters"])
-
-    patroni_config = patroni_config_tuned_copy.copy()
-
-else:
-    print("Existing tuned file does not exist")
-    with open('spilo.yaml', 'r') as yaml_file_source:
-        patroni_config = yaml.safe_load(yaml_file_source)
+print("Existing tuned file does not exist")
+with open('spilo.yaml', 'r') as yaml_file_source:
+    patroni_config = yaml.safe_load(yaml_file_source)
 
 # if "shared_buffers" in patroni_config["postgresql"]["parameters"]:
 #     recommended_settings.pop("shared_buffers", "")
