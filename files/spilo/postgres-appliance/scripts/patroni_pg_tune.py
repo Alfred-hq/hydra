@@ -6,7 +6,7 @@ command = "timescaledb-tune --yes --dry-run -conf-path=pgdata/pgroot/data/postgr
 output = subprocess.check_output(command, shell=True, text=True)
 
 def is_a_postgres_configuration(line: any):
-    if '=' in line:
+    if '=' in line and '#' not in line:
         return True
     else:
         return False
