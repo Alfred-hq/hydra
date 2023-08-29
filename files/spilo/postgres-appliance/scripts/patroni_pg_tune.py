@@ -82,12 +82,14 @@ for key, value in recommended_settings.items():
     else:
         sanitized_configurations[key] = value
 
-patroni_config["postgresql"]["parameters"].update(sanitized_configurations)
+patroni_config_copy = patroni_config.copy()
 
-patroni_config["bootstrap"]["dcs"]["postgresql"]["parameters"].update(sanitized_configurations)
+patroni_config_copy["postgresql"]["parameters"].update(sanitized_configurations)
+
+patroni_config_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(sanitized_configurations)
 # Print the formatted YAML output
 print("Structured YAML representation of recommended settings:")
-print(patroni_config)
+print(patroni_config_copy)
 
 with open('spilo_tuned.yaml', 'w') as yaml_file:
-    yaml.dump(patroni_config, yaml_file, default_flow_style=False)
+    yaml.dump(patroni_config_copy, yaml_file, default_flow_style=False)
