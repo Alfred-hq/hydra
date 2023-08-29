@@ -49,7 +49,7 @@ tuned_file_exist = os.path.isfile('pgdata/pgroot/spilo_tuned.yaml')
 
 if tuned_file_exist:
     print("Existing tuned file exist taking it as source")
-    with open('spilo_tuned.yaml', 'r') as yaml_file_source:
+    with open('pgdata/pgroot/spilo_tuned.yaml', 'r') as yaml_file_source:
         patroni_config = yaml.safe_load(yaml_file_source)
 else:
     print("Existing tuned file does not exist")
