@@ -17,12 +17,23 @@ print("Output of timescaledb-tune command:")
 print(sanitized_configurations)
 print("\n")
 
+def try_convert_to_number(s):
+    try:
+        number = int(s)
+        return number
+    except ValueError:
+        try:
+            number = float(s)
+            return number
+        except ValueError:
+            return s
+
 # Process the recommended items and create a dictionary
 recommended_settings = {}
 
 for config in sanitized_configurations:
     key, value = config.split('=')
-    recommended_settings[key.strip()] = value.strip().replace("'", "")
+    recommended_settings[key.strip()] = try_convert_to_number(value.strip().replace("'", ""))
 
 recommended_settings.pop("max_connections", "")
 recommended_settings.pop("max_replication_slots", "")
