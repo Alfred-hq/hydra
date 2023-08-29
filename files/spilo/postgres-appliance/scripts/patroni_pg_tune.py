@@ -55,13 +55,13 @@ if tuned_file_exist:
     with open('pgdata/pgroot/spilo_tuned.yaml', 'r') as yaml_file_source:
         patroni_config_tuned = yaml.safe_load(yaml_file_source)
 
-        patroni_config_tuned_copy = patroni_config_tuned.copy()
+    patroni_config_tuned_copy = patroni_config_tuned.copy()
 
-        patroni_config_tuned_copy["postgresql"]["parameters"].update(fresh_config["postgresql"]["parameters"])
+    patroni_config_tuned_copy["postgresql"]["parameters"].update(fresh_config["postgresql"]["parameters"])
 
-        patroni_config_tuned_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(fresh_config["bootstrap"]["dcs"]["postgresql"]["parameters"])
+    patroni_config_tuned_copy["bootstrap"]["dcs"]["postgresql"]["parameters"].update(fresh_config["bootstrap"]["dcs"]["postgresql"]["parameters"])
 
-        patroni_config = patroni_config_tuned_copy.copy()
+    patroni_config = patroni_config_tuned_copy.copy()
 
 else:
     print("Existing tuned file does not exist")
