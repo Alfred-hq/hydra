@@ -33,7 +33,7 @@ recommended_settings = {}
 
 for config in sanitized_configurations:
     key, value = config.split('=')
-    recommended_settings[key.strip()] = try_convert_to_number(value.strip().replace("'", ""))
+    recommended_settings[key.strip()] = try_convert_to_number(value.strip().replace("'", "").replace("#", ""))
 
 recommended_settings.pop("max_connections", "")
 recommended_settings.pop("max_replication_slots", "")
