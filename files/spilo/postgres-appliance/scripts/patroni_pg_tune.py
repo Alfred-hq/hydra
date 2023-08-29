@@ -2,7 +2,7 @@ import subprocess
 import yaml
 
 # Run timescaledb-tune command and capture the output
-command = "timescaledb-tune --yes --dry-run -conf-path=pgdata/pgroot/data/postgresql.base.conf"
+command = "timescaledb-tune --yes --dry-run -conf-path=pgdata/pgroot/data/postgresql.base.conf --memory=$(free -m | awk '/Mem/{print int($2 * 0.7)}')MB"
 output = subprocess.check_output(command, shell=True, text=True)
 
 def is_a_postgres_configuration(line: any):
